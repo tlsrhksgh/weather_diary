@@ -3,6 +3,7 @@ package com.zero.weather.service;
 import com.zero.weather.WeatherApplication;
 import com.zero.weather.domain.DateWeather;
 import com.zero.weather.domain.Diary;
+import com.zero.weather.error.InvalidDate;
 import com.zero.weather.repository.DateWeatherRepository;
 import com.zero.weather.repository.DiaryRepository;
 import org.json.simple.JSONArray;
@@ -91,7 +92,10 @@ public class DiaryService {
 
     @Transactional(readOnly = true)
     public List<Diary> readDiary(LocalDate date) {
-        logger.info("read diary");
+        if(date.isAfter(LocalDate.ofYearDay(2023, 1))) {
+            throw new InvalidDate();
+        }
+
         return diaryRepository.findAllByDate(date);
 
     }
